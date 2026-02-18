@@ -1,0 +1,23 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "scopeName": "source.sql.python",
+  "injectionSelector": "L:source.python string.quoted, L:source.python meta.fstring.python",
+  "patterns": [
+    {
+      "name": "meta.embedded.block.sql",
+      "begin": "(?i)(\\s*--\\s*sql\\b)",
+      "beginCaptures": {
+        "1": { "name": "comment.line.sql-marker.python" }
+      },
+      "end": "(?=\"\"\"|'''|\"|')",
+      "patterns": [
+        {
+          "include": "source.sql"
+        },
+        {
+          "include": "source.python#fstring-guts"
+        }
+      ]
+    }
+  ]
+}

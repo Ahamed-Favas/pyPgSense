@@ -9,7 +9,9 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onLanguage:python"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -17,7 +19,16 @@
         "command": "sqlens.helloWorld",
         "title": "sqlens"
       }
-    ]
+    ],  
+    "grammars": [
+    {
+      "scopeName": "source.sql.python",
+      "path": "./syntaxes/sql-python.tmLanguage.json",
+      "injectTo": [
+        "source.python"
+      ]
+    }
+  ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
