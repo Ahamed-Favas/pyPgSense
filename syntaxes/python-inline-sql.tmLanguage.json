@@ -1,0 +1,48 @@
+{
+  "scopeName": "inline-sql.injection.python",
+  "injectionSelector": "L:source.python",
+  "patterns": [
+    {
+      "name": "meta.embedded.inline.sql.python",
+      "begin": "\\b(?:query|sql|statement|stmt|raw_sql)\\s*=\\s*([rRuUbB]{0,2})(\"\"\"|'''|\"|')",
+      "beginCaptures": {
+        "2": {
+          "name": "punctuation.definition.string.begin.python"
+        }
+      },
+      "end": "\\2",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.end.python"
+        }
+      },
+      "contentName": "meta.embedded.inline.sql source.sql",
+      "patterns": [
+        {
+          "include": "source.sql"
+        }
+      ]
+    },
+    {
+      "name": "meta.embedded.inline.sql.python",
+      "begin": "\\b(?:execute|executemany|fetch|fetchrow|fetchval|fetchone|fetchall)\\s*\\(\\s*([rRuUbB]{0,2})(\"\"\"|'''|\"|')",
+      "beginCaptures": {
+        "2": {
+          "name": "punctuation.definition.string.begin.python"
+        }
+      },
+      "end": "\\2",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.end.python"
+        }
+      },
+      "contentName": "meta.embedded.inline.sql source.sql",
+      "patterns": [
+        {
+          "include": "source.sql"
+        }
+      ]
+    }
+  ]
+}

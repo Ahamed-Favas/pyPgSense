@@ -1,6 +1,6 @@
-# sqlens README
+# pyPgSense README
 
-This is the README for your extension "sqlens". After writing up a brief description, we recommend including the following sections.
+This is the README for your extension "pyPgSense". After writing up a brief description, we recommend including the following sections.
 
 ## Features
 

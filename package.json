@@ -1,7 +1,7 @@
 {
-  "name": "sqlens",
-  "displayName": "Sqlens",
-  "description": "Automatically detects embedded SQL in Python strings with DB-aware validation, syntax highlighting, and intelligent linting.",
+  "name": "pypgsense",
+  "displayName": "pyPgSense",
+  "description": "Automatically detects embedded PostgreSQL in Python strings with DB-aware validation, syntax highlighting, and intelligent linting",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.109.0"
@@ -10,25 +10,84 @@
     "Other"
   ],
   "activationEvents": [
-    "onLanguage:python"
+    "onLanguage:python",
+    "onLanguage:sql"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "sqlens.helloWorld",
-        "title": "sqlens"
+        "command": "pypgsense.openInlineSql",
+        "title": "Open Inline SQL"
+      },
+      {
+        "command": "pypgsense.runSelectedSql",
+        "title": "Run Selected SQL"
+      },
+      {
+        "command": "pypgsense.setPostgresConnection",
+        "title": "Set PostgreSQL Connection"
+      },
+      {
+        "command": "pypgsense.refreshSqlSchemaCache",
+        "title": "Refresh SQL Schema Cache"
       }
-    ],  
-    "grammars": [
-    {
-      "scopeName": "source.sql.python",
-      "path": "./syntaxes/sql-python.tmLanguage.json",
-      "injectTo": [
-        "source.python"
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "pypgsense-sidebar",
+          "title": "SQL Lens",
+          "icon": "resources/sidebar-random.svg"
+        }
       ]
-    }
-  ]
+    },
+    "views": {
+      "pypgsense-sidebar": [
+        {
+          "icon": "resources/sidebar-random.svg",
+          "id": "pypgsense.connectionView",
+          "name": "Connection Details",
+          "type": "webview"
+        }
+      ]
+    },
+    "menus": {
+      "editor/title": [
+        {
+          "command": "pypgsense.runSelectedSql",
+          "when": "editorLangId == sql",
+          "group": "navigation@10"
+        },
+        {
+          "command": "pypgsense.refreshSqlSchemaCache",
+          "when": "editorLangId == sql",
+          "group": "navigation@11"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "pypgsense",
+      "properties": {
+        "pypgsense.postgres.connectionString": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "PostgreSQL connection string used by `Run Selected SQL`. Prefer using the `Set PostgreSQL Connection` command so it is stored in Secret Storage."
+        }
+      }
+    },
+    "grammars": [
+      {
+        "scopeName": "inline-sql.injection.python",
+        "path": "./syntaxes/python-inline-sql.tmLanguage.json",
+        "injectTo": [
+          "source.python"
+        ],
+        "embeddedLanguages": {
+          "meta.embedded.inline.sql": "sql"
+        }
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -38,7 +97,13 @@
     "lint": "eslint src",
     "test": "vscode-test"
   },
+  "dependencies": {
+    "pg": "^8.16.3",
+    "tree-sitter": "^0.22.4",
+    "tree-sitter-python": "^0.23.6"
+  },
   "devDependencies": {
+    "@types/pg": "^8.15.6",
     "@types/vscode": "^1.109.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
