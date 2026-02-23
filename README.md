@@ -1,71 +1,48 @@
-# pyPgSense README
+# pyPgSense
 
-This is the README for your extension "pyPgSense". After writing up a brief description, we recommend including the following sections.
+PostgreSQL-aware SQL tooling for Python strings and SQL files in VS Code.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- Detects SQL-like strings in Python assignments and call arguments using tree-sitter and heuristics.
+- Adds an "Open SQL" CodeLens on detected inline SQL to open a SQL editor side-by-side.
+- Syntax highlighting for common inline SQL patterns in Python (for example `query`/`sql`/`statement` assignments and `execute`/`fetch` call arguments).
+- SQL completions (keywords, tables, columns) in SQL files and inside detected Python SQL strings.
+- DB-backed SQL linting for SQL editors via `PREPARE`, with diagnostics shown in Problems.
+- Run selected SQL from a SQL editor and view results in a webview.
+- Connection management via the pyPgSense sidebar or the command palette, stored in Secret Storage.
 
-For example if there is an image subfolder under your extension project workspace:
+## Quick Start
 
-\!\[feature X\]\(images/feature-x.png\)
+1. Open any Python or SQL file to activate the extension.
+2. Run `pyPgSense: Set PostgreSQL Connection` or open the pyPgSense view and save connection details.
+3. In Python, write a SQL string and use the `Open SQL` CodeLens to open it as a SQL document.
+4. Use completions and `pyPgSense: Run Selected SQL` from a SQL editor. Linting runs automatically on SQL documents.
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+## Commands
+
+- `pyPgSense: Open Inline SQL` - Open detected inline SQL in a side-by-side SQL editor.
+- `pyPgSense: Run Selected SQL` - Execute the current selection or entire SQL document and show results.
+- `pyPgSense: Set PostgreSQL Connection` - Save or clear the connection string.
+- `pyPgSense: Refresh SQL Schema Cache` - Reload tables and columns from PostgreSQL.
+
+## Settings
+
+- `pypgsense.postgres.connectionString`: Optional connection string used by `Run Selected SQL` and schema/linting. Prefer the command so it is stored in Secret Storage.
+
+## How Inline SQL Is Detected
+
+- SQL-like text is extracted from Python assignments and the first argument of function calls.
+- Detection is heuristic and based on SQL keywords; it may miss or include strings in edge cases.
+- For syntax highlighting inside Python, only a set of common variable names and call patterns are injected.
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
+- A reachable PostgreSQL database for schema-aware completions, linting, and query execution.
+- VS Code 1.109.0 or later.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+### 0.0.1
 
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+Initial release.

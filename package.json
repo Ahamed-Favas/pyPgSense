@@ -37,7 +37,7 @@
       "activitybar": [
         {
           "id": "pypgsense-sidebar",
-          "title": "SQL Lens",
+          "title": "pyPgSense",
           "icon": "resources/sidebar-random.svg"
         }
       ]
