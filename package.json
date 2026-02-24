@@ -38,14 +38,14 @@
         {
           "id": "pypgsense-sidebar",
           "title": "pyPgSense",
-          "icon": "resources/sidebar-random.svg"
+          "icon": "resources/icon.svg"
         }
       ]
     },
     "views": {
       "pypgsense-sidebar": [
         {
-          "icon": "resources/sidebar-random.svg",
+          "icon": "resources/icon.svg",
           "id": "pypgsense.connectionView",
           "name": "Connection Details",
           "type": "webview"
