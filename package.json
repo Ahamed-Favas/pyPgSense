@@ -22,7 +22,7 @@
       },
       {
         "command": "pypgsense.runSelectedSql",
-        "title": "Run Selected SQL"
+        "title": "▶︎ Run SQL"
       },
       {
         "command": "pypgsense.setPostgresConnection",
@@ -30,7 +30,7 @@
       },
       {
         "command": "pypgsense.refreshSqlSchemaCache",
-        "title": "Refresh SQL Schema Cache"
+        "title": "🔄 Refresh Schema"
       }
     ],
     "viewsContainers": {
@@ -57,12 +57,12 @@
         {
           "command": "pypgsense.runSelectedSql",
           "when": "editorLangId == sql",
-          "group": "navigation@10"
+          "group": "navigation@1"
         },
         {
           "command": "pypgsense.refreshSqlSchemaCache",
           "when": "editorLangId == sql",
-          "group": "navigation@11"
+          "group": "navigation@2"
         }
       ]
     },
