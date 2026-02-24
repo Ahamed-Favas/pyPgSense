@@ -381,7 +381,12 @@ ORDER BY table_schema, table_name, ordinal_position
 }
 
 async function runTestQuery(connectionString: string): Promise<string | undefined> {
-	const client = new Client({ connectionString });
+	const timeoutMs = 15_000;
+	const client = new Client({
+		connectionString,
+		connectionTimeoutMillis: timeoutMs,
+		query_timeout: timeoutMs,
+	});
 	try {
 		await client.connect();
 		await client.query('SELECT 1');
