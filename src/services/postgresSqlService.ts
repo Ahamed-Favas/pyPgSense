@@ -81,6 +81,30 @@ export class PostgresSqlService implements vscode.Disposable {
 		return undefined;
 	}
 
+	public async testConnection(values: ConnectionFormValues): Promise<void> {
+		const validationError = validateConnectionForm(values);
+		if (validationError) {
+			void vscode.window.showErrorMessage(validationError);
+			return;
+		}
+
+		await vscode.window.withProgress(
+			{
+				location: vscode.ProgressLocation.Notification,
+				title: 'Testing PostgreSQL connection',
+				cancellable: false,
+			},
+			async () => {
+				const error = await runTestQuery(buildConnectionString(values));
+				if (error) {
+					void vscode.window.showErrorMessage(`Connection failed: ${error}`);
+				} else {
+					void vscode.window.showInformationMessage('Connection successful.');
+				}
+			}
+		);
+	}
+
 	public async runFromActiveEditor(): Promise<void> {
 		const editor = vscode.window.activeTextEditor;
 		if (!editor) {
@@ -335,9 +359,13 @@ ORDER BY table_schema, table_name, ordinal_position
 				resolve(result);
 			};
 
-			const messageDisposable = panel.webview.onDidReceiveMessage((message: unknown) => {
+			const messageDisposable = panel.webview.onDidReceiveMessage(async (message: unknown) => {
 				const parsed = asConnectionFormResult(message);
 				if (!parsed) {
+					return;
+				}
+				if (parsed.kind === 'test') {
+					await this.testConnection(parsed.values);
 					return;
 				}
 				settle(parsed);
@@ -349,6 +377,19 @@ ORDER BY table_schema, table_name, ordinal_position
 				settle(undefined);
 			});
 		});
+	}
+}
+
+async function runTestQuery(connectionString: string): Promise<string | undefined> {
+	const client = new Client({ connectionString });
+	try {
+		await client.connect();
+		await client.query('SELECT 1');
+		return undefined;
+	} catch (error) {
+		return error instanceof Error ? error.message : String(error);
+	} finally {
+		await safeCloseClient(client);
 	}
 }
 

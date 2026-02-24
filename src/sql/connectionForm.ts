@@ -94,12 +94,12 @@ export function asConnectionFormResult(message: unknown): ConnectionFormResult |
 		return { kind: 'clear' };
 	}
 
-	if (payload.type !== 'save' || !payload.values) {
+	if ((payload.type !== 'save' && payload.type !== 'test') || !payload.values) {
 		return undefined;
 	}
 
 	return {
-		kind: 'save',
+		kind: payload.type === 'save' ? 'save' : 'test',
 		values: {
 			host: payload.values.host ?? '',
 			port: payload.values.port ?? '',
@@ -162,6 +162,7 @@ export function renderConnectionFormHtml(initialValues: ConnectionFormValues): s
 		}
 		.actions {
 			display: flex;
+			flex-wrap: wrap;
 			gap: 8px;
 			margin-top: 4px;
 		}
@@ -176,6 +177,12 @@ export function renderConnectionFormHtml(initialValues: ConnectionFormValues): s
 		button.secondary {
 			background: var(--vscode-button-secondaryBackground);
 			color: var(--vscode-button-secondaryForeground);
+		}
+		button.small {
+			background: var(--vscode-button-secondaryBackground);
+			color: var(--vscode-button-secondaryForeground);
+			padding: 4px 8px;
+			font-size: 12px;
 		}
 		.hint {
 			margin-top: 10px;
@@ -216,6 +223,7 @@ export function renderConnectionFormHtml(initialValues: ConnectionFormValues): s
 				<option value="require">require</option>
 			</select>
 		</div>
+		<button id="testBtn" class="small" type="button">Test Connection</button>
 		<div class="actions">
 			<button type="submit">Save Connection</button>
 			<button id="clearBtn" class="secondary" type="button">Clear Saved</button>
@@ -226,6 +234,7 @@ export function renderConnectionFormHtml(initialValues: ConnectionFormValues): s
 		const vscode = acquireVsCodeApi();
 		const initialValues = ${initialValuesJson};
 		const form = document.getElementById('connectionForm');
+		const testBtn = document.getElementById('testBtn');
 		const clearBtn = document.getElementById('clearBtn');
 		const host = document.getElementById('host');
 		const port = document.getElementById('port');
@@ -241,18 +250,27 @@ export function renderConnectionFormHtml(initialValues: ConnectionFormValues): s
 		password.value = initialValues.password || '';
 		sslMode.value = initialValues.sslMode || 'disable';
 
+		const collectValues = () => ({
+			host: host.value,
+			port: port.value,
+			database: database.value,
+			user: user.value,
+			password: password.value,
+			sslMode: sslMode.value
+		});
+
 		form.addEventListener('submit', (event) => {
 			event.preventDefault();
 			vscode.postMessage({
 				type: 'save',
-				values: {
-					host: host.value,
-					port: port.value,
-					database: database.value,
-					user: user.value,
-					password: password.value,
-					sslMode: sslMode.value
-				}
+				values: collectValues()
+			});
+		});
+
+		testBtn.addEventListener('click', () => {
+			vscode.postMessage({
+				type: 'test',
+				values: collectValues()
 			});
 		});
 

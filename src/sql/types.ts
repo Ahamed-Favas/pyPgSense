@@ -57,4 +57,5 @@ export type ConnectionFormValues = {
 
 export type ConnectionFormResult =
 	| { kind: 'save'; values: ConnectionFormValues }
+	| { kind: 'test'; values: ConnectionFormValues }
 	| { kind: 'clear' };

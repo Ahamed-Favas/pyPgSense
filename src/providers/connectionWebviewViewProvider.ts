@@ -29,15 +29,22 @@ export class ConnectionWebviewViewProvider implements vscode.WebviewViewProvider
 				if (parsed.kind === 'clear') {
 					await this.sqlService.clearConnection();
 					void vscode.window.showInformationMessage('PostgreSQL connection string removed.');
-				} else {
-					const validationError = await this.sqlService.saveConnectionFromValues(parsed.values);
-					if (validationError) {
-						void vscode.window.showErrorMessage(validationError);
-					} else {
-						void vscode.window.showInformationMessage('PostgreSQL connection string saved.');
-					}
+					await this.refresh();
+					return;
 				}
 
+				if (parsed.kind === 'test') {
+					await this.sqlService.testConnection(parsed.values);
+					return;
+				}
+
+				const validationError = await this.sqlService.saveConnectionFromValues(parsed.values);
+				if (validationError) {
+					void vscode.window.showErrorMessage(validationError);
+					return;
+				}
+
+				void vscode.window.showInformationMessage('PostgreSQL connection string saved.');
 				await this.refresh();
 			}),
 			webviewView.onDidDispose(() => {
