@@ -5,13 +5,18 @@ import Python = require('tree-sitter-python');
 import { SQL_CONTEXT_REGEX, SQL_START_REGEX } from '../constants/sql';
 import { SqlStatement, SqlStringGroup, SqlStringPart } from './types';
 
-export function createPythonParser(): Parser {
-	const parser = new Parser();
-	parser.setLanguage(Python as Parser.Language);
-	return parser;
+export function createPythonParser(): Parser | undefined {
+	try {
+		const parser = new Parser();
+		parser.setLanguage(Python as Parser.Language);
+		return parser;
+	} catch (error) {
+		console.error('[pyPgSense] Failed to initialize tree-sitter parser:', error);
+		return undefined;
+	}
 }
 
-export function extractSqlStatements(document: vscode.TextDocument, parser: Parser): SqlStatement[] {
+export function extractSqlStatements(document: vscode.TextDocument, parser: Parser | undefined): SqlStatement[] {
 	const source = document.getText();
 	const groups = extractSqlStringGroups(parser, source);
 	const statements: SqlStatement[] = [];
@@ -31,7 +36,11 @@ export function extractSqlStatements(document: vscode.TextDocument, parser: Pars
 	return statements;
 }
 
-export function extractSqlStringGroups(parser: Parser, source: string): SqlStringGroup[] {
+export function extractSqlStringGroups(parser: Parser | undefined, source: string): SqlStringGroup[] {
+	if (!parser) {
+		return [];
+	}
+
 	const tree = parser.parse(source);
 	const root = tree.rootNode;
 	const groups: SqlStringGroup[] = [];
@@ -72,8 +81,12 @@ export function extractSqlStringGroups(parser: Parser, source: string): SqlStrin
 export function getPythonSqlCompletionContext(
 	document: vscode.TextDocument,
 	position: vscode.Position,
-	parser: Parser
+	parser: Parser | undefined
 ): { sqlText: string; linePrefix: string } | undefined {
+	if (!parser) {
+		return undefined;
+	}
+
 	const source = document.getText();
 	const offset = document.offsetAt(position);
 	const groups = extractSqlStringGroups(parser, source);

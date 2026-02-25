@@ -6,4 +6,5 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
-- Initial release
+- Added command/view activation events so connection UI works before opening Python/SQL files.
+- Added safe fallback when `tree-sitter` parser initialization fails, preventing full extension activation failure.
