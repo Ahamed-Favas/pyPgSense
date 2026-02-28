@@ -44,6 +44,12 @@ export class SqlCompletionProvider implements vscode.CompletionItemProvider {
 			return tableItems;
 		}
 
+		const isSelectContext = /\bselect\s+[\w\W]*$/i.test(context.linePrefix);
+		if (isSelectContext) {
+			const allColumns = getAllColumns(snapshot);
+			return createColumnCompletionItems(allColumns, replaceRange);
+		}
+
 		return [...keywordItems, ...tableItems];
 	}
 
@@ -65,6 +71,18 @@ export class SqlCompletionProvider implements vscode.CompletionItemProvider {
 		return getPythonSqlCompletionContext(document, position, this.pythonParser);
 	}
 }
+
+
+function getAllColumns(snapshot: SchemaSnapshot): string[] {
+    const set = new Set<string>();
+    for (const table of snapshot.tables) {
+        for (const col of table.columns) {
+            set.add(col);
+        }
+    }
+    return [...set];
+}
+
 
 function createKeywordCompletionItems(range: vscode.Range | undefined): vscode.CompletionItem[] {
 	return SQL_KEYWORDS.map((keyword) => {
