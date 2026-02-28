@@ -6,15 +6,20 @@ import { SchemaSnapshot } from '../sql/types';
 import { PostgresSqlService } from '../services/postgresSqlService';
 
 export class SqlCompletionProvider implements vscode.CompletionItemProvider {
-	private readonly pythonParser = createPythonParser();
+	private readonly pythonParserPromise: ReturnType<typeof createPythonParser>;
 
-	public constructor(private readonly sqlService: PostgresSqlService) {}
+	public constructor(
+		private readonly sqlService: PostgresSqlService,
+		extensionPath: string
+	) {
+		this.pythonParserPromise = createPythonParser(extensionPath);
+	}
 
 	public async provideCompletionItems(
 		document: vscode.TextDocument,
 		position: vscode.Position
 	): Promise<vscode.CompletionItem[]> {
-		const context = this.getCompletionContext(document, position);
+		const context = await this.getCompletionContext(document, position);
 		if (!context) {
 			return [];
 		}
@@ -53,10 +58,10 @@ export class SqlCompletionProvider implements vscode.CompletionItemProvider {
 		return [...keywordItems, ...tableItems];
 	}
 
-	private getCompletionContext(
+	private async getCompletionContext(
 		document: vscode.TextDocument,
 		position: vscode.Position
-	): { sqlText: string; linePrefix: string } | undefined {
+	): Promise<{ sqlText: string; linePrefix: string; } | undefined> {
 		if (document.languageId === 'sql') {
 			return {
 				sqlText: document.getText(),
@@ -68,7 +73,8 @@ export class SqlCompletionProvider implements vscode.CompletionItemProvider {
 			return undefined;
 		}
 
-		return getPythonSqlCompletionContext(document, position, this.pythonParser);
+		const parser = await this.pythonParserPromise;
+		return getPythonSqlCompletionContext(document, position, parser);
 	}
 }
 

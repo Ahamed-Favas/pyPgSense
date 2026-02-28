@@ -1,17 +1,42 @@
+import * as path from 'path';
 import * as vscode from 'vscode';
-import Parser = require('tree-sitter');
-import Python = require('tree-sitter-python');
+import Parser = require('web-tree-sitter');
 
 import { SQL_CONTEXT_REGEX, SQL_START_REGEX } from '../constants/sql';
 import { SqlStatement, SqlStringGroup, SqlStringPart } from './types';
 
-export function createPythonParser(): Parser | undefined {
+let parserInit: Promise<void> | undefined;
+let pythonLanguage: Parser.Language | undefined;
+
+async function ensureParserInitialized(extensionPath: string): Promise<void> {
+	if (!parserInit) {
+		const wasmPath = path.join(extensionPath, 'node_modules', 'web-tree-sitter', 'tree-sitter.wasm');
+		parserInit = Parser.init({
+			locateFile: () => wasmPath,
+		});
+	}
+	await parserInit;
+}
+
+export async function createPythonParser(extensionPath: string): Promise<Parser | undefined> {
 	try {
+		await ensureParserInitialized(extensionPath);
+
+		if (!pythonLanguage) {
+			const wasmPath = path.join(
+				extensionPath,
+				'node_modules',
+				'tree-sitter-python',
+				'tree-sitter-python.wasm'
+			);
+			pythonLanguage = await Parser.Language.load(wasmPath);
+		}
+
 		const parser = new Parser();
-		parser.setLanguage(Python as Parser.Language);
+		parser.setLanguage(pythonLanguage);
 		return parser;
 	} catch (error) {
-		console.error('[pyPgSense] Failed to initialize tree-sitter parser:', error);
+		console.error('[pyPgSense] Failed to initialize web-tree-sitter parser:', error);
 		return undefined;
 	}
 }

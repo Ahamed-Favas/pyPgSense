@@ -9,10 +9,10 @@ import { PostgresSqlService } from './services/postgresSqlService';
 
 export function activate(context: vscode.ExtensionContext): void {
 
-	const codeLensProvider = new InlineSqlCodeLensProvider();
+	const codeLensProvider = new InlineSqlCodeLensProvider(context.extensionPath);
 	const sqlService = new PostgresSqlService(context);
 	const connectionViewProvider = new ConnectionWebviewViewProvider(sqlService);
-	const sqlCompletionProvider = new SqlCompletionProvider(sqlService);
+	const sqlCompletionProvider = new SqlCompletionProvider(sqlService, context.extensionPath);
 	const lintManager = new SqlLintManager(sqlService);
 
 	context.subscriptions.push(codeLensProvider, sqlService, lintManager, connectionViewProvider);
