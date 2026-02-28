@@ -2,22 +2,20 @@
   "name": "pypgsense",
   "displayName": "pyPgSense",
   "description": "Automatically detects embedded PostgreSQL in Python strings with DB-aware validation, syntax highlighting, and intelligent linting",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "publisher": "ahamedfavas",
-  "repository": "https://github.com/ahamed-Favas/pyPgSense",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ahamed-Favas/pyPgSense.git"
+  },
   "icon": "resources/pypgsense.png",
   "engines": {
-    "vscode": "^1.109.0"
+    "vscode": "^1.97.1"
   },
   "categories": [
     "Other"
   ],
   "activationEvents": [
-    "onView:pypgsense.connectionView",
-    "onCommand:pypgsense.setPostgresConnection",
-    "onCommand:pypgsense.runSelectedSql",
-    "onCommand:pypgsense.refreshSqlSchemaCache",
-    "onCommand:pypgsense.openInlineSql",
     "onLanguage:python",
     "onLanguage:sql"
   ],
@@ -112,7 +110,7 @@
   },
   "devDependencies": {
     "@types/pg": "^8.15.6",
-    "@types/vscode": "^1.109.0",
+    "@types/vscode": "^1.97.1",
     "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
     "typescript-eslint": "^8.54.0",
