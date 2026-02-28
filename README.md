@@ -9,8 +9,8 @@
 </p>
 
 <p align="center">
-  <a href="./package.json"><img alt="Version" src="https://img.shields.io/badge/version-0.0.3-1f6feb" /></a>
-  <a href="https://code.visualstudio.com/"><img alt="VS Code" src="https://img.shields.io/badge/VS%20Code-%5E1.109.0-007acc" /></a>
+  <a href="./package.json"><img alt="Version" src="https://img.shields.io/badge/version-0.0.4-1f6feb" /></a>
+  <a href="https://code.visualstudio.com/"><img alt="VS Code" src="https://img.shields.io/badge/VS%20Code-%5E1.97.1-007acc" /></a>
   <a href="./LICENSE.md"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-2da44e" /></a>
 </p>
 
