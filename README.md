@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="./package.json"><img alt="Version" src="https://img.shields.io/badge/version-0.0.5-1f6feb" /></a>
+  <a href="./package.json"><img alt="Version" src="https://img.shields.io/badge/version-0.0.6-1f6feb" /></a>
   <a href="https://code.visualstudio.com/"><img alt="VS Code" src="https://img.shields.io/badge/VS%20Code-%5E1.97.1-007acc" /></a>
   <a href="./LICENSE.md"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-2da44e" /></a>
 </p>
@@ -84,22 +84,3 @@ pyPgSense currently detects SQL-like text from:
 
 - VS Code `^1.97.1`
 - A reachable PostgreSQL database for schema-aware completion, linting, and execution
-
-## Development
-
-```bash
-npm install
-npm run compile
-```
-
-Useful scripts:
-
-- `npm run watch` - TypeScript watch mode
-- `npm run lint` - ESLint
-- `npm test` - VS Code extension tests
-
-## Project Links
-
-- Repository: [github.com/ahamed-Favas/pyPgSense](https://github.com/ahamed-Favas/pyPgSense)
-- Changelog: [CHANGELOG.md](./CHANGELOG.md)
-- License: [LICENSE.md](./LICENSE.md)

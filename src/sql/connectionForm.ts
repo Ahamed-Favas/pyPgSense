@@ -225,11 +225,10 @@ export function renderConnectionFormHtml(initialValues: ConnectionFormValues): s
 		</div>
 		<button id="testBtn" class="small" type="button">Test Connection</button>
 		<div class="actions">
-			<button type="submit">Save Connection</button>
 			<button id="clearBtn" class="secondary" type="button">Clear Saved</button>
+			<button type="submit">Save Connection</button>
 		</div>
 	</form>
-	<div class="hint">Saved in VS Code Secret Storage as a connection string.</div>
 	<script>
 		const vscode = acquireVsCodeApi();
 		const initialValues = ${initialValuesJson};

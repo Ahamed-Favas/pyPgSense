@@ -21,7 +21,7 @@ export class InlineSqlCodeLensProvider implements vscode.CodeLensProvider, vscod
 		const statements = extractSqlStatements(document, parser);
 		return statements.map((statement) => {
 			return new vscode.CodeLens(statement.range, {
-				title: 'Open SQL',
+				title: 'Open SQL Editor',
 				command: 'pypgsense.openInlineSql',
 				arguments: [statement.content],
 			});

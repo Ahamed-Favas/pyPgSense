@@ -2,7 +2,7 @@
   "name": "pypgsense",
   "displayName": "pyPgSense",
   "description": "Automatically detects embedded PostgreSQL in Python strings with DB-aware validation, syntax highlighting, and intelligent linting",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "publisher": "ahamedfavas",
   "repository": {
     "type": "git",
